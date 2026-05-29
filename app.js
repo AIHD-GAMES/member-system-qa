@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const qText = document.createElement('span');
                     qText.className = 'faq-question-text';
-                    // Support newlines in questions if any
-                    qText.innerHTML = faq.question.replace(/\n/g, '<br>');
+                    // Support newlines in questions safely (no innerHTML)
+                    qText.style.whiteSpace = 'pre-line';
+                    qText.textContent = faq.question;
 
                     const toggleIcon = document.createElement('span');
                     toggleIcon.className = 'faq-toggle-icon';
@@ -79,17 +80,38 @@ document.addEventListener('DOMContentLoaded', () => {
                         answerText.appendChild(highlightP);
                     }
 
-                    // Render paragraphs (split by newline)
+                    // Render paragraphs (split by newline) – XSS-safe DOM construction
                     const paragraphs = faq.answer.split('\n');
                     paragraphs.forEach(pText => {
                         const p = document.createElement('p');
                         
-                        // Parse simple links: check if there's an http/https link in the text and convert to a tag with target="_blank"
+                        // Parse URLs safely using DOM APIs (no innerHTML)
                         const urlRegex = /(https?:\/\/[^\s]+)/g;
-                        if (urlRegex.test(pText)) {
-                            p.innerHTML = pText.replace(urlRegex, (url) => {
-                                return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-                            });
+                        let lastIndex = 0;
+                        let match;
+                        let hasUrl = false;
+                        
+                        while ((match = urlRegex.exec(pText)) !== null) {
+                            hasUrl = true;
+                            // Add text before the URL
+                            if (match.index > lastIndex) {
+                                p.appendChild(document.createTextNode(pText.slice(lastIndex, match.index)));
+                            }
+                            // Create safe anchor element
+                            const a = document.createElement('a');
+                            a.href = match[1];
+                            a.target = '_blank';
+                            a.rel = 'noopener noreferrer';
+                            a.textContent = match[1];
+                            p.appendChild(a);
+                            lastIndex = urlRegex.lastIndex;
+                        }
+                        
+                        if (hasUrl) {
+                            // Add remaining text after last URL
+                            if (lastIndex < pText.length) {
+                                p.appendChild(document.createTextNode(pText.slice(lastIndex)));
+                            }
                         } else {
                             p.textContent = pText;
                         }
