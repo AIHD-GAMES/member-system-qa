@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 | 会員専用システム</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="faq-container">
+        <!-- Header -->
+        <header class="faq-header">
+            <span class="faq-subtitle">FAQ</span>
+            <h1 class="faq-title">会員専用システム よくある質問</h1>
+            <p class="faq-desc">システムのご利用やログインでお困りの際は、こちらの項目をご確認ください。</p>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="search" id="faq-search-input" class="search-input" placeholder="キーワードで質問を検索（例：ログイン、キャッシュ）" autocomplete="off">
+                <button type="button" id="faq-search-clear" class="search-clear-btn" aria-label="検索ワードをクリア" hidden>
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="search-stats" id="search-stats">
+                全 <span id="search-count" class="stat-num">10</span> 件中 <span id="search-visible-count" class="stat-num">10</span> 件を表示
+            </div>
+        </div>
+
+        <!-- FAQ Accordion List -->
+        <main class="faq-main">
+            <div class="faq-list" id="faq-list">
+            <!-- Question 1 -->
+            <details class="faq-item" name="faq-accordion" id="faq-1">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">ログアウトしてもページが更新されない</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">パソコンやスマートフォンの仕組み上、一度見た画面の情報が端末内に一時的に保存されてしまう「キャッシュ」という現象がございます。</p>
+                        <p>そのため、ログアウトをしても端末側が「以前の古い情報」を優先的に表示してしまうことが稀にございます。</p>
+                        <p>もし「画面が古いまま（更新されない）」と感じられた際は、以下の操作をお試しください。</p>
+                        <p>■パソコンの場合</p>
+                        <p>画面の左上などにある「くるっと回った矢印（更新ボタン）」を一度押してください。</p>
+                        <p>■スマホの場合</p>
+                        <p>画面を一番上まで戻し、さらに「下にグイッと引っ張る」と更新されます。</p>
+                        <p>最新の状態に切り替わるかと存じますので、ぜひお試しください。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 2 -->
+            <details class="faq-item" name="faq-accordion" id="faq-2">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">講習動画が再生されない<br>動画が途中で止まる</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">通信の混雑（特に朝や夜間）や、端末の一時的な不具合が考えられます。</p>
+                        <p>・アプリを完全に閉じて開き直す</p>
+                        <p>一度ログアウトし、ブラウザ（インターネットの画面）を完全に閉じてから、再度ログインして読み込み直してください。</p>
+                        <p>・Wi-Fi（ワイファイ）を入れ直す</p>
+                        <p>画面の「扇形のマーク」を一度オフにし、数秒待ってから再度オンにしてみてください。</p>
+                        <p>・別の回線を試す</p>
+                        <p>Wi-Fiを切って、スマートフォンの回線（4G/5G）に切り替えるとスムーズに流れることがあります。</p>
+                        <p>・専用のアプリ（SafariやChrome）で開く</p>
+                        <p>LINEやメールの中のリンクからではなく、Safari（方位磁石のマーク） や Chrome（カラフルな丸いマーク） を直接開いてアクセスしてください。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 3 -->
+            <details class="faq-item" name="faq-accordion" id="faq-3">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">●/64の講義が見れません<br>（次の動画が見れません）</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">本講座では、着実にステップアップしていただくため、以下の設定を設けております。</p>
+                        <p>■視聴可能な範囲について</p>
+                        <p>受講初日は、まず全体の進め方を把握していただくため、【4/64（受講ガイダンス含む）】までが視聴可能です。</p>
+                        <p>それ以降の講義につきましては、着実に学びを深めていただくため、1日に1講義ずつ順次公開される仕組みとなっております。</p>
+                        <p>■動画の表示状態について</p>
+                        <p>グレーの状態： 公開前の講義です（順次公開をお待ちください）。</p>
+                        <p>白色の状態： 公開済みの講義です。クリックしてご視聴いただけます。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 4 -->
+            <details class="faq-item" name="faq-accordion" id="faq-4">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">音が聴こえない</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">以下の3点をご確認ください</p>
+                        <p>1. 動画画面の「スピーカーマーク」をチェック</p>
+                        <p>動画の左下（または右下）にあるスピーカーのマークに 「×」 がついていないか。</p>
+                        <p>もし 「×」 がついていたら、そのマークを一度クリックして解除してください。</p>
+                        <p>2. パソコンやスマホ自体の音量をアップ</p>
+                        <p>キーボードの音量ボタンや、スマホの横についている音量ボタンを押して、音が小さすぎないか確認してください。</p>
+                        <p>別の動画や音楽は聞こえるか試してみるのがおすすめです。</p>
+                        <p>3. イヤホンや外部スピーカーの接続を確認</p>
+                        <p>イヤホンがしっかり奥まで刺さっているか、またはワイヤレスイヤホン（Bluetooth）が意図せず別の部屋でつながっていないかご確認ください。</p>
+                        <p>もし上記を試しても解決しない場合は、一度ブラウザ（インターネットの画面）を閉じ、再度開き直してみてください。</p>
+                        <p>一時的な不具合が解消されることがございます。</p>
+                        <p>【もし音がプツプツ途切れたり、画面が止まる場合】</p>
+                        <p>インターネット（Wi-Fi）の接続が一時的に弱くなっている可能性があります。</p>
+                        <p>その場合は、画面の「Wi-Fiマーク」を一度消して、数秒後にまた入れ直してみてください。</p>
+                        <p>【それでも解決しないときは】</p>
+                        <p>一度インターネットの画面を閉じ、再度開き直してみてください。</p>
+                        <p>一時的な不具合が解消されることがございます。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 5 -->
+            <details class="faq-item" name="faq-accordion" id="faq-5">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">ログインできない</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">入力内容が正しく認識されていない可能性がございます。</p>
+                        <p>お手数ですが、以下の3点をご確認ください。</p>
+                        <p>・「半角」で入力されているか。</p>
+                        <p>アルファベットや数字が、太い文字（全角）になっていないかご確認ください。</p>
+                        <p>必ず「半角（細い文字）」でのご入力をお願いいたします。</p>
+                        <p>・余計な「空白（スペース）」が入っていないか。</p>
+                        <p>文字の前後に目に見えない空白が入ると、エラーになります。</p>
+                        <p>一度すべて消してから、一文字ずつ手入力することをお試しください。</p>
+                        <p>・最新のパスワードか。</p>
+                        <p>以前の古いパスワードが自動で表示されている場合がございます。</p>
+                        <p>一度消去し、最新のものをご入力ください。</p>
+                        <p>【それでも解決しない場合】</p>
+                        <p>以下の手順で、パスワードの再発行（作り直し）が可能です。</p>
+                        <p>■ 会員専用システム ログインページ</p>
+                        <p>https://toshibu-sstm.com/system/</p>
+                        <p>①上記ログインページを開き、「パスワードを忘れた方はこちら」を押す</p>
+                        <p>➁メールアドレスを入力し、届いた案内から再設定する</p>
+                        <p>【もしメールが届かない場合は……】</p>
+                        <p>迷惑メールフォルダに入っていないか、一度ご確認ください。</p>
+                        <p>操作が難しい場合や、メールが見当たらないときは、ご無理をなさらずサポートチームまでお気軽にご相談くださいませ。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 6 -->
+            <details class="faq-item" name="faq-accordion" id="faq-6">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">パスワードを忘れた</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">セキュリティの都合上、パスワードはお客様ご自身での管理をお願いしております。</p>
+                        <p>もしお忘れになった場合は、以下の手順で新しく作り直す（再設定する）ことが可能です。</p>
+                        <p>■ 会員専用システム ログインページ</p>
+                        <p>https://toshibu-sstm.com/system/</p>
+                        <p>①上記ログインページを開き、「パスワードを忘れた方はこちら」を押す</p>
+                        <p>➁メールアドレスを入力し、届いた案内から再設定する</p>
+                        <p>※操作が難しい場合は、ご無理をなさらずサポートチームまでご連絡ください。こちらで変更のお手伝いをさせていただきます。</p>
+                        <p>【もしメールが届かない場合は……】</p>
+                        <p>迷惑メールフォルダに入っていないか、一度ご確認ください。</p>
+                        <p>操作が難しい場合や、メールが見当たらないときは、ご無理をなさらずサポートチームまでお気軽にご相談くださいませ。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 7 -->
+            <details class="faq-item" name="faq-accordion" id="faq-7">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">ページの有効期限切れ</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">「ページの有効期限が切れました」と表示された場合でも、</p>
+                        <p>これはセキュリティ保護のための表示であり、受講ができなくなったわけではございません。</p>
+                        <p>どうぞご安心ください。</p>
+                        <p>以下の操作で、元の画面に戻ることができます。</p>
+                        <p>・画面を「再読み込み」する</p>
+                        <p>画面の左上などにある「くるっと回った矢印（更新ボタン）」を押してください。</p>
+                        <p>・一度画面を閉じて、開き直す</p>
+                        <p>一度インターネットの画面を完全に閉じ、再度ログインし直してください。</p>
+                        <p>・「戻る」ボタンを使わない</p>
+                        <p>操作中に前の画面に戻りたいときは、画面内の「戻る」ボタン（もしあれば）を使うか、メニューから選び直すとエラーが起きにくくなります。</p>
+                        <p>※インターネットの画面は、『一歩進むごとに情報を記録』しています。ブラウザの戻るボタンを使うと、その記録が途切れてしまい、</p>
+                        <p>システムが『迷子』になってエラー（有効期限切れ）が出てしまうことがございます。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 8 -->
+            <details class="faq-item" name="faq-accordion" id="faq-8">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">パソコンとスマホ両方で会員専用システムを使いたいが可能か</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">どちらの機種からでも、ご利用いただけます。</p>
+                        <p>ご自宅では画面の大きなパソコンで、外出先では手軽なスマートフォンで、といった使い分けも可能です。</p>
+                        <p>・どちらからでもログインしてOK</p>
+                        <p>パソコンで使っている時と同じ「メールアドレス」と「パスワード」で、スマートフォンからもログインいただけます。</p>
+                        <p>・URL（ホームページのアドレス）は共通です</p>
+                        <p>パソコンでもスマートフォンでも、アクセスするページは同じです。</p>
+                        <p>・学習の続きから再開できます</p>
+                        <p>どちらの機種で視聴しても、学習の記録は共通して保存されますのでご安心ください。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 9 -->
+            <details class="faq-item" name="faq-accordion" id="faq-9">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">①パソコンのデスクトップからすぐに会員専用システムを開けないのか</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">パソコンの画面に「専用のアイコン（ショートカット）」を作っておくと、次回からダブルクリックするだけで、すぐに会員ページを開くことができます。</p>
+                        <p>【手順】</p>
+                        <p>①パソコンの壁紙（何もないところ）で「右クリック」する</p>
+                        <p>マウスの右側のボタンを一度カチッと押してください。</p>
+                        <p>➁「新規作成」→「ショートカット」を選ぶ</p>
+                        <p>出てきたメニューの中から「新規作成」にマウスを合わせ、その横に出る「ショートカット」を押してください。</p>
+                        <p>③アドレス（URL）を入力する</p>
+                        <p>「項目の場所を入力してください」という空欄に、ログインページのURLを貼り付けるか、入力してください。入力できたら、右下の「次へ」を押します。</p>
+                        <p>④名前をつけて完了</p>
+                        <p>「このショートカットの名前を入力してください」という欄に、「【投資部】会員サイト」など、ご自身がわかりやすい名前を入力して、最後に「完了」を押してください。</p>
+                        <p>これで、次からは画面上のアイコンを押すだけで、パッと会員ページが開くようになります。</p>
+                        <p>■iPhone / iPad の場合</p>
+                        <p>①Safari（方位磁石のマーク）でログインページを開きます。</p>
+                        <p>➁画面の下にある 「四角から矢印が飛び出しているマーク」 を押します。</p>
+                        <p>③メニューを少し下に送り、「ホーム画面に追加」 を押します。</p>
+                        <p>④右上の 「追加」 を押せば、ホーム画面にアイコンができあがります。</p>
+                        <p>■Android（スマートフォン）の場合</p>
+                        <p>①Chrome（カラフルな丸いマーク）でログインページを開きます。</p>
+                        <p>➁画面の右上にある 「点3つのマーク（︙）」 を押します。</p>
+                        <p>③「ホーム画面に追加」 を押します。</p>
+                        <p>④「追加」 を押せば、ホーム画面にアイコンができあがります。</p>
+                        <p>■Mac（パソコン）の場合</p>
+                        <p>①Safari（方位磁石のマーク）でログインページを開き、画面を少し小さくします。</p>
+                        <p>➁URL（アドレス）の左側にある 「小さな丸いマーク」 をマウスでつかみます。</p>
+                        <p>③そのまま デスクトップ（壁紙）の上まで引きずって（ドラッグして） 指を離せば、アイコンができあがります。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+            <!-- Question 10 -->
+            <details class="faq-item" name="faq-accordion" id="faq-10">
+                <summary class="faq-summary">
+                    <span class="faq-q-badge">Q</span>
+                    <span class="faq-question-text">メニューを押しても反応がない</span>
+                    <span class="faq-toggle-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </summary>
+                <div class="faq-answer-wrapper">
+                    <div class="faq-answer-content">
+                        <span class="faq-a-badge">A</span>
+                        <div class="faq-answer-text">
+                            <p class="faq-answer-highlight">一時的な読み込みエラーや、お使いの端末（スマホ・パソコン）の設定が影響している可能性がございます。</p>
+                        <p>お手数ですが、以下の手順を上から順番にお試しください。</p>
+                        <p>1. ページの「再読み込み（更新）」を試す</p>
+                        <p>画面の一番上にある「くるっとした矢印マーク（更新ボタン）」を押してください。</p>
+                        <p>これだけで、読み込みがスムーズになり、正常に動くようになることがよくあります。</p>
+                        <p>2. 時間を空けてから再度お試しいただく</p>
+                        <p>インターネットの回線が一時的に混み合っている場合、ボタンが反応しづらくなることがございます。</p>
+                        <p>数分から数十分ほどお時間を空けてから、改めて操作をお試しください。</p>
+                        <p>少し時間を置くことで、回線の混雑が解消され、スムーズに画面が切り替わるようになることがございます。</p>
+                        <p>3. 推奨されているブラウザ（閲覧アプリ）を試す</p>
+                        <p>LINEなどのアプリ内から画面を開いている場合、ボタンが正しく反応しないことがございます。</p>
+                        <p>その場合は、普段お使いの「Google Chrome」や「Safari」などのブラウザアプリに切り替えて、再度開き直してみてください。</p>
+                        <p>4. 端末の「再起動」</p>
+                        <p>上記を試しても解決しない場合は、一度スマートフォンやパソコンの電源を切り、再起動を行ってください。</p>
+                        <p>機器のリセットにより、動作が改善するケースが非常に多くございます。</p>
+                        </div>
+                    </div>
+                </div>
+            </details>
+
+                <!-- Empty State -->
+                <div class="faq-empty-state" id="no-results-msg" hidden>
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p class="empty-title">該当する質問が見つかりませんでした</p>
+                    <p class="empty-desc">別のキーワードで再度お試しください。</p>
+                    <button type="button" id="reset-search-btn" class="reset-btn">検索をリセット</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Minimal Footer -->
+        <footer class="faq-footer">
+            <p class="copyright">© 2026 会員専用システム事務局</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
