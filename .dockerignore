@@ -1,0 +1,6 @@
+.git
+.gitignore
+*.xlsx
+Dockerfile
+cloudbuild.yaml
+*.log
