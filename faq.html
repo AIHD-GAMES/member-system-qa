@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>よくある質問 | 会員専用システム</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@600;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Shared Style -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Single FAQ page specific styles */
+        .faq-single-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--primary);
+            border-radius: 14px;
+            box-shadow: var(--shadow-hover);
+            overflow: hidden;
+        }
+
+        .faq-single-question {
+            display: flex;
+            align-items: center;
+            padding: 22px 28px;
+        }
+
+        .faq-single-answer {
+            background-color: #FCFBF9;
+            border-top: 1px solid var(--border);
+            padding: 26px 28px;
+        }
+
+        .faq-single-answer-content {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .faq-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 32px;
+            padding: 12px 24px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--primary);
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-back-link:hover {
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-1px);
+        }
+
+        .faq-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .faq-loading .spinner {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 14px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .faq-error {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-muted);
+        }
+
+        .faq-error-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .faq-single-question {
+                padding: 18px 20px;
+            }
+            .faq-single-answer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="faq-container">
+        <!-- Header -->
+        <header class="faq-header">
+            <span class="faq-subtitle">FAQ</span>
+            <h1 class="faq-title">会員専用システム よくある質問</h1>
+            <p class="faq-desc">お問い合わせいただいたご質問にお答えいたします。</p>
+        </header>
+
+        <!-- FAQ Single Content (dynamic) -->
+        <main class="faq-main" id="faq-content">
+            <div class="faq-loading">
+                <div class="spinner"></div>
+                <p>読み込み中...</p>
+            </div>
+        </main>
+
+        <!-- Minimal Footer -->
+        <footer class="faq-footer">
+            <p class="copyright">© 2026 会員専用システム事務局</p>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
+        const contentEl = document.getElementById('faq-content');
+
+        // Get FAQ ID from URL query parameter
+        const params = new URLSearchParams(window.location.search);
+        const faqId = parseInt(params.get('id'), 10);
+
+        if (!faqId || isNaN(faqId)) {
+            showError('FAQが指定されていません。', '下記のリンクからFAQ一覧をご覧ください。');
+            return;
+        }
+
+        fetchAndRender(faqId);
+
+        async function fetchAndRender(id) {
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error('HTTP error ' + res.status);
+                const faqs = await res.json();
+
+                const faq = Array.isArray(faqs) ? faqs.find(f => f.id === id) : null;
+
+                if (!faq) {
+                    showError('お探しのFAQが見つかりませんでした。', '下記のリンクからFAQ一覧をご覧ください。');
+                    return;
+                }
+
+                // Update page title
+                document.title = faq.question + ' | よくある質問 | 会員専用システム';
+
+                renderFaq(faq);
+            } catch (e) {
+                console.error('Failed to fetch FAQ:', e);
+                showError('読み込みに失敗しました。', '時間をおいて再度お試しください。');
+            }
+        }
+
+        function renderFaq(faq) {
+            contentEl.innerHTML = '';
+
+            // Card
+            const card = document.createElement('div');
+            card.className = 'faq-single-card';
+
+            // Question section
+            const questionSection = document.createElement('div');
+            questionSection.className = 'faq-single-question';
+
+            const qBadge = document.createElement('span');
+            qBadge.className = 'faq-q-badge';
+            qBadge.textContent = 'Q';
+
+            const qText = document.createElement('span');
+            qText.className = 'faq-question-text';
+            qText.style.whiteSpace = 'pre-line';
+            qText.textContent = faq.question;
+
+            questionSection.appendChild(qBadge);
+            questionSection.appendChild(qText);
+
+            // Answer section
+            const answerSection = document.createElement('div');
+            answerSection.className = 'faq-single-answer';
+
+            const answerContent = document.createElement('div');
+            answerContent.className = 'faq-single-answer-content';
+
+            const aBadge = document.createElement('span');
+            aBadge.className = 'faq-a-badge';
+            aBadge.textContent = 'A';
+
+            const answerText = document.createElement('div');
+            answerText.className = 'faq-answer-text';
+
+            // Highlight
+            if (faq.answer_highlight) {
+                const highlightP = document.createElement('p');
+                highlightP.className = 'faq-answer-highlight';
+                highlightP.textContent = faq.answer_highlight;
+                answerText.appendChild(highlightP);
+            }
+
+            // Answer paragraphs – XSS-safe DOM construction
+            const paragraphs = faq.answer.split('\n');
+            paragraphs.forEach(pText => {
+                const p = document.createElement('p');
+
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                let lastIndex = 0;
+                let match;
+                let hasUrl = false;
+
+                while ((match = urlRegex.exec(pText)) !== null) {
+                    hasUrl = true;
+                    if (match.index > lastIndex) {
+                        p.appendChild(document.createTextNode(pText.slice(lastIndex, match.index)));
+                    }
+                    const a = document.createElement('a');
+                    a.href = match[1];
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.textContent = match[1];
+                    p.appendChild(a);
+                    lastIndex = urlRegex.lastIndex;
+                }
+
+                if (hasUrl) {
+                    if (lastIndex < pText.length) {
+                        p.appendChild(document.createTextNode(pText.slice(lastIndex)));
+                    }
+                } else {
+                    p.textContent = pText;
+                }
+
+                answerText.appendChild(p);
+            });
+
+            answerContent.appendChild(aBadge);
+            answerContent.appendChild(answerText);
+            answerSection.appendChild(answerContent);
+
+            card.appendChild(questionSection);
+            card.appendChild(answerSection);
+
+            contentEl.appendChild(card);
+
+            // Back link
+            const backLink = document.createElement('a');
+            backLink.href = './';
+            backLink.className = 'faq-back-link';
+            backLink.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+            backLink.appendChild(document.createTextNode(' よくある質問一覧へ戻る'));
+            contentEl.appendChild(backLink);
+        }
+
+        function showError(title, subtitle) {
+            contentEl.innerHTML = '';
+
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'faq-error';
+
+            const icon = document.createElement('div');
+            icon.className = 'faq-error-icon';
+            icon.innerHTML = '<i class="fa-solid fa-circle-question"></i>';
+
+            const h2 = document.createElement('h2');
+            h2.style.cssText = 'font-size:1.1rem; color:var(--text-main); margin-bottom:8px;';
+            h2.textContent = title;
+
+            const p = document.createElement('p');
+            p.style.cssText = 'font-size:0.92rem; margin-bottom:20px;';
+            p.textContent = subtitle;
+
+            errorDiv.appendChild(icon);
+            errorDiv.appendChild(h2);
+            errorDiv.appendChild(p);
+
+            const backLink = document.createElement('a');
+            backLink.href = './';
+            backLink.className = 'faq-back-link';
+            backLink.innerHTML = '<i class="fa-solid fa-list"></i>';
+            backLink.appendChild(document.createTextNode(' FAQ一覧を見る'));
+            errorDiv.appendChild(backLink);
+
+            contentEl.appendChild(errorDiv);
+        }
+    });
+    </script>
+</body>
+</html>

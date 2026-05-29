@@ -1,7 +1,7 @@
 FROM nginx:alpine
 
 # Copy static assets to Nginx default public directory
-COPY index.html style.css app.js /usr/share/nginx/html/
+COPY index.html faq.html style.css app.js /usr/share/nginx/html/
 
 # Copy default.conf.template for Cloud Run port mapping
 COPY default.conf.template /etc/nginx/templates/default.conf.template
