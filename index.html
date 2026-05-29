@@ -25,20 +25,6 @@
             <p class="faq-desc">システムのご利用やログインでお困りの際は、こちらの項目をご確認ください。</p>
         </header>
 
-        <!-- Search Section -->
-        <div class="search-section">
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="search" id="faq-search-input" class="search-input" placeholder="キーワードで質問を検索（例：ログイン、キャッシュ）" autocomplete="off">
-                <button type="button" id="faq-search-clear" class="search-clear-btn" aria-label="検索ワードをクリア" hidden>
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="search-stats" id="search-stats">
-                全 <span id="search-count" class="stat-num">10</span> 件中 <span id="search-visible-count" class="stat-num">10</span> 件を表示
-            </div>
-        </div>
-
         <!-- FAQ Accordion List -->
         <main class="faq-main">
             <div class="faq-list" id="faq-list">
@@ -332,14 +318,6 @@
                     </div>
                 </div>
             </details>
-
-                <!-- Empty State -->
-                <div class="faq-empty-state" id="no-results-msg" hidden>
-                    <i class="fa-solid fa-circle-info"></i>
-                    <p class="empty-title">該当する質問が見つかりませんでした</p>
-                    <p class="empty-desc">別のキーワードで再度お試しください。</p>
-                    <button type="button" id="reset-search-btn" class="reset-btn">検索をリセット</button>
-                </div>
             </div>
         </main>
 
