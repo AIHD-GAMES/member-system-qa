@@ -181,6 +181,18 @@ body {
     margin-bottom: 0;
 }
 
+.faq-answer-text a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    word-break: break-all;
+    transition: color 0.2s;
+}
+
+.faq-answer-text a:hover {
+    color: var(--primary-light);
+}
+
 .faq-answer-highlight {
     font-weight: 700;
     color: var(--primary);
