@@ -3,8 +3,9 @@ FROM nginx:alpine
 # Copy static assets to Nginx default public directory
 COPY index.html style.css app.js /usr/share/nginx/html/
 
-# Expose port 80 (default for Nginx)
-EXPOSE 80
+# Copy default.conf.template for Cloud Run port mapping
+COPY default.conf.template /etc/nginx/templates/default.conf.template
 
 # Run Nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
+
