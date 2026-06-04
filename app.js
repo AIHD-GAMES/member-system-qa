@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
+    const PAGE_SIZE = 25;
     const faqListContainer = document.getElementById('faq-list');
+    const faqPagination = document.getElementById('faq-pagination');
     const allowedTags = new Set(['A', 'HR', 'P', 'UL', 'OL', 'LI', 'STRONG', 'B', 'U', 'MARK', 'SPAN']);
     const allowedClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray', 'note', 'warning']);
     const allowedSpanClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray']);
     const hexColorRegex = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+    let allFaqs = [];
+    let currentPage = 1;
 
     function appendSafeRichText(target, rawText) {
         const source = String(rawText || '');
@@ -117,6 +121,116 @@ document.addEventListener('DOMContentLoaded', () => {
     let detailsElements = document.querySelectorAll('.faq-item');
     initAccordion(detailsElements);
 
+    function buildFaqItem(faq) {
+        const details = document.createElement('details');
+        details.className = 'faq-item';
+        details.name = 'faq-accordion';
+        details.id = `faq-${faq.id}`;
+
+        const summary = document.createElement('summary');
+        summary.className = 'faq-summary';
+
+        const qBadge = document.createElement('span');
+        qBadge.className = 'faq-q-badge';
+        qBadge.textContent = 'Q';
+
+        const qText = document.createElement('span');
+        qText.className = 'faq-question-text';
+        qText.style.whiteSpace = 'pre-line';
+        qText.textContent = faq.question;
+
+        const toggleIcon = document.createElement('span');
+        toggleIcon.className = 'faq-toggle-icon';
+        toggleIcon.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+
+        summary.appendChild(qBadge);
+        summary.appendChild(qText);
+        summary.appendChild(toggleIcon);
+
+        const answerWrapper = document.createElement('div');
+        answerWrapper.className = 'faq-answer-wrapper';
+
+        const answerContent = document.createElement('div');
+        answerContent.className = 'faq-answer-content';
+
+        const aBadge = document.createElement('span');
+        aBadge.className = 'faq-a-badge';
+        aBadge.textContent = 'A';
+
+        const answerText = document.createElement('div');
+        answerText.className = 'faq-answer-text';
+
+        appendSafeRichText(answerText, faq.answer);
+
+        answerContent.appendChild(aBadge);
+        answerContent.appendChild(answerText);
+        answerWrapper.appendChild(answerContent);
+
+        details.appendChild(summary);
+        details.appendChild(answerWrapper);
+
+        return details;
+    }
+
+    function renderPagination(totalPages) {
+        if (!faqPagination) return;
+
+        faqPagination.innerHTML = '';
+        if (totalPages <= 1) {
+            faqPagination.hidden = true;
+            return;
+        }
+
+        faqPagination.hidden = false;
+
+        const prevButton = createPaginationButton('前へ', currentPage <= 1, () => {
+            renderFaqPage(currentPage - 1);
+        });
+
+        const status = document.createElement('span');
+        status.className = 'faq-pagination-status';
+        status.textContent = `${currentPage} / ${totalPages} ページ`;
+
+        const nextButton = createPaginationButton('次へ', currentPage >= totalPages, () => {
+            renderFaqPage(currentPage + 1);
+        });
+
+        faqPagination.appendChild(prevButton);
+        faqPagination.appendChild(status);
+        faqPagination.appendChild(nextButton);
+    }
+
+    function createPaginationButton(label, disabled, onClick) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'faq-pagination-button';
+        button.textContent = label;
+        button.disabled = disabled;
+        button.addEventListener('click', onClick);
+        return button;
+    }
+
+    function renderFaqPage(page) {
+        const totalPages = Math.max(1, Math.ceil(allFaqs.length / PAGE_SIZE));
+        currentPage = Math.min(Math.max(1, page), totalPages);
+
+        faqListContainer.innerHTML = '';
+
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const pageFaqs = allFaqs.slice(start, start + PAGE_SIZE);
+        pageFaqs.forEach(faq => {
+            faqListContainer.appendChild(buildFaqItem(faq));
+        });
+
+        const dynamicDetails = faqListContainer.querySelectorAll('.faq-item');
+        initAccordion(dynamicDetails);
+        renderPagination(totalPages);
+
+        if (page !== 1) {
+            document.querySelector('.faq-header')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
     // Fetch and update dynamically
     async function hydrateFaqs() {
         try {
@@ -124,65 +238,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error("HTTP error " + res.status);
             const faqs = await res.json();
             if (Array.isArray(faqs) && faqs.length > 0) {
-                // Clear original items
-                faqListContainer.innerHTML = '';
-
-                // Build dynamic list
-                faqs.forEach(faq => {
-                    const details = document.createElement('details');
-                    details.className = 'faq-item';
-                    details.name = 'faq-accordion';
-                    details.id = `faq-${faq.id}`;
-
-                    const summary = document.createElement('summary');
-                    summary.className = 'faq-summary';
-
-                    const qBadge = document.createElement('span');
-                    qBadge.className = 'faq-q-badge';
-                    qBadge.textContent = 'Q';
-
-                    const qText = document.createElement('span');
-                    qText.className = 'faq-question-text';
-                    // Support newlines in questions safely (no innerHTML)
-                    qText.style.whiteSpace = 'pre-line';
-                    qText.textContent = faq.question;
-
-                    const toggleIcon = document.createElement('span');
-                    toggleIcon.className = 'faq-toggle-icon';
-                    toggleIcon.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
-
-                    summary.appendChild(qBadge);
-                    summary.appendChild(qText);
-                    summary.appendChild(toggleIcon);
-
-                    const answerWrapper = document.createElement('div');
-                    answerWrapper.className = 'faq-answer-wrapper';
-
-                    const answerContent = document.createElement('div');
-                    answerContent.className = 'faq-answer-content';
-
-                    const aBadge = document.createElement('span');
-                    aBadge.className = 'faq-a-badge';
-                    aBadge.textContent = 'A';
-
-                    const answerText = document.createElement('div');
-                    answerText.className = 'faq-answer-text';
-
-                    appendSafeRichText(answerText, faq.answer);
-
-                    answerContent.appendChild(aBadge);
-                    answerContent.appendChild(answerText);
-                    answerWrapper.appendChild(answerContent);
-
-                    details.appendChild(summary);
-                    details.appendChild(answerWrapper);
-
-                    faqListContainer.appendChild(details);
-                });
-
-                // Re-initialize accordion behavior for new elements
-                const dynamicDetails = faqListContainer.querySelectorAll('.faq-item');
-                initAccordion(dynamicDetails);
+                allFaqs = faqs;
+                renderFaqPage(1);
             }
         } catch (e) {
             console.warn("Failed to fetch dynamic FAQs. Fallback to static content.", e);
