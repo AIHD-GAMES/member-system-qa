@@ -171,6 +171,7 @@ body {
     color: var(--text-main);
     font-size: 0.98rem;
     line-height: 1.8;
+    white-space: pre-line;
 }
 
 .faq-answer-text p {
