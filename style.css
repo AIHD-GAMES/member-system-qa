@@ -46,27 +46,12 @@ body {
     margin-bottom: 50px;
 }
 
-.faq-subtitle {
-    display: inline-block;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: var(--primary);
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
 .faq-title {
     font-size: 2.1rem;
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 14px;
     letter-spacing: 0.02em;
-}
-
-.faq-desc {
-    font-size: 0.95rem;
-    color: var(--text-muted);
 }
 
 /* Search */
