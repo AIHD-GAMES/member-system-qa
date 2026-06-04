@@ -3,11 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const PAGE_SIZE = 25;
     const faqListContainer = document.getElementById('faq-list');
     const faqPagination = document.getElementById('faq-pagination');
+    const faqSearchInput = document.getElementById('faq-search-input');
+    const faqSearchStatus = document.getElementById('faq-search-status');
     const allowedTags = new Set(['A', 'HR', 'P', 'UL', 'OL', 'LI', 'STRONG', 'B', 'U', 'MARK', 'SPAN']);
     const allowedClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray', 'note', 'warning']);
     const allowedSpanClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray']);
     const hexColorRegex = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
     let allFaqs = [];
+    let filteredFaqs = [];
     let currentPage = 1;
 
     function appendSafeRichText(target, rawText) {
@@ -210,23 +213,60 @@ document.addEventListener('DOMContentLoaded', () => {
         return button;
     }
 
-    function renderFaqPage(page) {
-        const totalPages = Math.max(1, Math.ceil(allFaqs.length / PAGE_SIZE));
+    function renderSearchStatus() {
+        if (!faqSearchStatus) return;
+
+        const query = getSearchQuery();
+        if (!query) {
+            faqSearchStatus.textContent = '';
+            return;
+        }
+
+        faqSearchStatus.textContent = `${filteredFaqs.length}件見つかりました`;
+    }
+
+    function getSearchQuery() {
+        return String(faqSearchInput?.value || '').trim().toLowerCase();
+    }
+
+    function applyQuestionSearch() {
+        const query = getSearchQuery();
+        filteredFaqs = query
+            ? allFaqs.filter(faq => String(faq.question || '').toLowerCase().includes(query))
+            : allFaqs;
+
+        renderFaqPage(1, false);
+    }
+
+    function renderEmptySearchResult() {
+        const empty = document.createElement('div');
+        empty.className = 'faq-empty';
+        empty.textContent = '該当する質問が見つかりませんでした。';
+        faqListContainer.appendChild(empty);
+    }
+
+    function renderFaqPage(page, shouldScroll = true) {
+        const totalPages = Math.max(1, Math.ceil(filteredFaqs.length / PAGE_SIZE));
         currentPage = Math.min(Math.max(1, page), totalPages);
 
         faqListContainer.innerHTML = '';
 
         const start = (currentPage - 1) * PAGE_SIZE;
-        const pageFaqs = allFaqs.slice(start, start + PAGE_SIZE);
+        const pageFaqs = filteredFaqs.slice(start, start + PAGE_SIZE);
         pageFaqs.forEach(faq => {
             faqListContainer.appendChild(buildFaqItem(faq));
         });
 
+        if (pageFaqs.length === 0) {
+            renderEmptySearchResult();
+        }
+
         const dynamicDetails = faqListContainer.querySelectorAll('.faq-item');
         initAccordion(dynamicDetails);
         renderPagination(totalPages);
+        renderSearchStatus();
 
-        if (page !== 1) {
+        if (shouldScroll && page !== 1) {
             document.querySelector('.faq-header')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
@@ -239,12 +279,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const faqs = await res.json();
             if (Array.isArray(faqs) && faqs.length > 0) {
                 allFaqs = faqs;
-                renderFaqPage(1);
+                applyQuestionSearch();
             }
         } catch (e) {
             console.warn("Failed to fetch dynamic FAQs. Fallback to static content.", e);
         }
     }
+
+    faqSearchInput?.addEventListener('input', applyQuestionSearch);
 
     // Call hydration
     hydrateFaqs();

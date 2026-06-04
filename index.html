@@ -27,6 +27,14 @@
 
         <!-- FAQ Accordion List -->
         <main class="faq-main">
+            <div class="faq-search" role="search">
+                <label class="faq-search-label" for="faq-search-input">質問キーワード検索</label>
+                <div class="faq-search-box">
+                    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                    <input id="faq-search-input" class="faq-search-input" type="search" placeholder="例: ログイン、パスワード、動画" autocomplete="off">
+                </div>
+                <p class="faq-search-status" id="faq-search-status" aria-live="polite"></p>
+            </div>
             <div class="faq-list" id="faq-list">
             <!-- Question 1 -->
             <details class="faq-item" name="faq-accordion" id="faq-1">
