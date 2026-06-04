@@ -229,10 +229,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return String(faqSearchInput?.value || '').trim().toLowerCase();
     }
 
+    function normalizeSearchText(text) {
+        return String(text || '')
+            .normalize('NFKC')
+            .toLowerCase()
+            .replace(/[\u3041-\u3096]/g, char => String.fromCharCode(char.charCodeAt(0) + 0x60));
+    }
+
     function applyQuestionSearch() {
         const query = getSearchQuery();
+        const normalizedQuery = normalizeSearchText(query);
         filteredFaqs = query
-            ? allFaqs.filter(faq => String(faq.question || '').toLowerCase().includes(query))
+            ? allFaqs.filter(faq => normalizeSearchText(faq.question).includes(normalizedQuery))
             : allFaqs;
 
         renderFaqPage(1, false);
