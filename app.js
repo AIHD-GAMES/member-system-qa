@@ -1,6 +1,102 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
     const faqListContainer = document.getElementById('faq-list');
+    const allowedTags = new Set(['A', 'HR', 'P', 'UL', 'OL', 'LI', 'STRONG', 'B', 'U', 'MARK', 'SPAN']);
+    const allowedClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray', 'note', 'warning']);
+    const allowedSpanClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray']);
+    const hexColorRegex = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+    function appendSafeRichText(target, rawText) {
+        const source = String(rawText || '');
+        if (!/[<>]/.test(source)) {
+            appendPlainTextWithLinks(target, source);
+            return;
+        }
+
+        const doc = new DOMParser().parseFromString(source, 'text/html');
+        Array.from(doc.body.childNodes).forEach(node => {
+            target.appendChild(sanitizeNode(node));
+        });
+    }
+
+    function sanitizeNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+            return document.createTextNode(node.textContent || '');
+        }
+
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return document.createTextNode('');
+        }
+
+        const tagName = node.tagName.toUpperCase();
+        if (!allowedTags.has(tagName)) {
+            const fragment = document.createDocumentFragment();
+            Array.from(node.childNodes).forEach(child => fragment.appendChild(sanitizeNode(child)));
+            return fragment;
+        }
+
+        const el = document.createElement(tagName.toLowerCase());
+        if (tagName === 'A') {
+            const href = node.getAttribute('href') || '';
+            if (/^https?:\/\//i.test(href)) {
+                el.setAttribute('href', href);
+                el.setAttribute('target', '_blank');
+                el.setAttribute('rel', 'noopener noreferrer');
+            }
+        }
+
+        const className = node.getAttribute('class') || '';
+        const cleanClasses = className.split(/\s+/).filter(name => {
+            if (!allowedClasses.has(name)) return false;
+            if (tagName === 'SPAN') return allowedSpanClasses.has(name);
+            return tagName === 'P';
+        });
+        if (cleanClasses.length > 0) {
+            el.className = cleanClasses.join(' ');
+        }
+
+        if (tagName === 'SPAN') {
+            const colorMatch = (node.getAttribute('style') || '').match(/(?:^|;)\s*color\s*:\s*(#[0-9a-f]{3}|#[0-9a-f]{6})\s*(?:;|$)/i);
+            if (colorMatch && hexColorRegex.test(colorMatch[1])) {
+                el.style.color = colorMatch[1];
+            }
+        }
+
+        Array.from(node.childNodes).forEach(child => el.appendChild(sanitizeNode(child)));
+        return el;
+    }
+
+    function appendPlainTextWithLinks(target, text) {
+        const paragraphs = String(text || '').split('\n');
+        paragraphs.forEach(pText => {
+            const p = document.createElement('p');
+            appendTextWithLinks(p, pText);
+            target.appendChild(p);
+        });
+    }
+
+    function appendTextWithLinks(target, text) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        let lastIndex = 0;
+        let match;
+
+        while ((match = urlRegex.exec(text)) !== null) {
+            if (match.index > lastIndex) {
+                target.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+            }
+            const a = document.createElement('a');
+            a.href = match[1];
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = match[1];
+            target.appendChild(a);
+            lastIndex = urlRegex.lastIndex;
+        }
+
+        if (lastIndex < text.length) {
+            target.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+    }
 
     // Initialize toggle behavior for details elements
     function initAccordion(elements) {
@@ -72,44 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const answerText = document.createElement('div');
                     answerText.className = 'faq-answer-text';
 
-                    // Render paragraphs (split by newline) – XSS-safe DOM construction
-                    const paragraphs = faq.answer.split('\n');
-                    paragraphs.forEach(pText => {
-                        const p = document.createElement('p');
-                        
-                        // Parse URLs safely using DOM APIs (no innerHTML)
-                        const urlRegex = /(https?:\/\/[^\s]+)/g;
-                        let lastIndex = 0;
-                        let match;
-                        let hasUrl = false;
-                        
-                        while ((match = urlRegex.exec(pText)) !== null) {
-                            hasUrl = true;
-                            // Add text before the URL
-                            if (match.index > lastIndex) {
-                                p.appendChild(document.createTextNode(pText.slice(lastIndex, match.index)));
-                            }
-                            // Create safe anchor element
-                            const a = document.createElement('a');
-                            a.href = match[1];
-                            a.target = '_blank';
-                            a.rel = 'noopener noreferrer';
-                            a.textContent = match[1];
-                            p.appendChild(a);
-                            lastIndex = urlRegex.lastIndex;
-                        }
-                        
-                        if (hasUrl) {
-                            // Add remaining text after last URL
-                            if (lastIndex < pText.length) {
-                                p.appendChild(document.createTextNode(pText.slice(lastIndex)));
-                            }
-                        } else {
-                            p.textContent = pText;
-                        }
-                        
-                        answerText.appendChild(p);
-                    });
+                    appendSafeRichText(answerText, faq.answer);
 
                     answerContent.appendChild(aBadge);
                     answerContent.appendChild(answerText);

@@ -181,6 +181,77 @@ body {
     margin-bottom: 0;
 }
 
+.faq-answer-text ul,
+.faq-answer-text ol {
+    margin: 0 0 12px 1.4em;
+    padding: 0;
+}
+
+.faq-answer-text li {
+    margin-bottom: 6px;
+}
+
+.faq-answer-text strong,
+.faq-answer-text b {
+    font-weight: 700;
+}
+
+.faq-answer-text mark {
+    background: #fef3c7;
+    color: var(--text-main);
+    border-radius: 4px;
+    padding: 0 4px;
+}
+
+.faq-answer-text hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 18px 0;
+}
+
+.faq-answer-text .text-red {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.faq-answer-text .text-blue {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.faq-answer-text .text-green {
+    color: #059669;
+    font-weight: 700;
+}
+
+.faq-answer-text .text-orange {
+    color: #ea580c;
+    font-weight: 700;
+}
+
+.faq-answer-text .text-gray {
+    color: var(--text-muted);
+}
+
+.faq-answer-text .note,
+.faq-answer-text .warning {
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-weight: 700;
+}
+
+.faq-answer-text .note {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+}
+
+.faq-answer-text .warning {
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    color: #c2410c;
+}
+
 .faq-answer-text a {
     color: var(--primary);
     text-decoration: underline;
