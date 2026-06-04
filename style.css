@@ -193,12 +193,6 @@ body {
     color: var(--primary-light);
 }
 
-.faq-answer-highlight {
-    font-weight: 700;
-    color: var(--primary);
-    font-size: 1.02rem;
-}
-
 /* Accordion Open State Styles */
 .faq-item[open] {
     border-color: var(--primary);

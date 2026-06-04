@@ -72,14 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     const answerText = document.createElement('div');
                     answerText.className = 'faq-answer-text';
 
-                    // If answer_highlight exists, render it
-                    if (faq.answer_highlight) {
-                        const highlightP = document.createElement('p');
-                        highlightP.className = 'faq-answer-highlight';
-                        highlightP.textContent = faq.answer_highlight;
-                        answerText.appendChild(highlightP);
-                    }
-
                     // Render paragraphs (split by newline) – XSS-safe DOM construction
                     const paragraphs = faq.answer.split('\n');
                     paragraphs.forEach(pText => {
