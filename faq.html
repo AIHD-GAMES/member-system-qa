@@ -143,11 +143,33 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
+        const PORTAL_URL = 'https://portal.toshibu-sstm.com/';
         const contentEl = document.getElementById('faq-content');
+        const portalBackButton = document.querySelector('.portal-back-button');
         const allowedTags = new Set(['A', 'HR', 'P', 'UL', 'OL', 'LI', 'STRONG', 'B', 'U', 'MARK', 'SPAN']);
         const allowedClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray', 'note', 'warning']);
         const allowedSpanClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray']);
         const hexColorRegex = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+        function setupPortalBackButton() {
+            if (!portalBackButton) return;
+
+            let backUrl = PORTAL_URL;
+            if (document.referrer) {
+                try {
+                    const referrerUrl = new URL(document.referrer);
+                    if (referrerUrl.origin !== window.location.origin) {
+                        backUrl = referrerUrl.href;
+                    }
+                } catch (e) {
+                    backUrl = PORTAL_URL;
+                }
+            }
+
+            portalBackButton.href = backUrl;
+        }
+
+        setupPortalBackButton();
 
         function appendSafeRichText(target, rawText) {
             const source = String(rawText || '');

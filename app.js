@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
+    const PORTAL_URL = 'https://portal.toshibu-sstm.com/';
     const PAGE_SIZE = 25;
     const faqListContainer = document.getElementById('faq-list');
     const faqPagination = document.getElementById('faq-pagination');
     const faqSearchInput = document.getElementById('faq-search-input');
     const faqSearchStatus = document.getElementById('faq-search-status');
+    const portalBackButton = document.querySelector('.portal-back-button');
     const allowedTags = new Set(['A', 'HR', 'P', 'UL', 'OL', 'LI', 'STRONG', 'B', 'U', 'MARK', 'SPAN']);
     const allowedClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray', 'note', 'warning']);
     const allowedSpanClasses = new Set(['text-red', 'text-blue', 'text-green', 'text-orange', 'text-gray']);
@@ -12,6 +14,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let allFaqs = [];
     let filteredFaqs = [];
     let currentPage = 1;
+
+    function setupPortalBackButton() {
+        if (!portalBackButton) return;
+
+        let backUrl = PORTAL_URL;
+        if (document.referrer) {
+            try {
+                const referrerUrl = new URL(document.referrer);
+                if (referrerUrl.origin !== window.location.origin) {
+                    backUrl = referrerUrl.href;
+                }
+            } catch (e) {
+                backUrl = PORTAL_URL;
+            }
+        }
+
+        portalBackButton.href = backUrl;
+    }
+
+    setupPortalBackButton();
 
     function appendSafeRichText(target, rawText) {
         const source = String(rawText || '');
