@@ -55,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const parsedUrl = new URL(url);
+            if (parsedUrl.origin === 'https://toshibu-sstm.com' && parsedUrl.pathname === '/') {
+                return SYSTEM_URL;
+            }
             if (ALLOWED_BACK_ORIGINS.has(parsedUrl.origin)) {
                 return parsedUrl.href;
             }
