@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_URL = 'https://hayashi-cs-backend-248098265972.asia-northeast1.run.app/public/member-qa';
     const PORTAL_URL = 'https://portal.toshibu-sstm.com/';
+    const SYSTEM_URL = 'https://toshibu-sstm.com/system/';
+    const LOGIN_URL = 'https://toshibu-sstm.com/stock_ms/src/public/login/';
+    const ALLOWED_BACK_ORIGINS = new Set(['https://toshibu-sstm.com', 'https://portal.toshibu-sstm.com']);
+    const BACK_TARGETS = {
+        system: SYSTEM_URL,
+        login: LOGIN_URL,
+        portal: PORTAL_URL
+    };
     const PAGE_SIZE = 25;
     const faqListContainer = document.getElementById('faq-list');
     const faqPagination = document.getElementById('faq-pagination');
@@ -18,19 +26,43 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupPortalBackButton() {
         if (!portalBackButton) return;
 
-        let backUrl = PORTAL_URL;
-        if (document.referrer) {
-            try {
-                const referrerUrl = new URL(document.referrer);
-                if (referrerUrl.origin !== window.location.origin) {
-                    backUrl = referrerUrl.href;
-                }
-            } catch (e) {
-                backUrl = PORTAL_URL;
-            }
+        portalBackButton.href = getBackUrl();
+    }
+
+    function getBackUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const namedTarget = params.get('back');
+        if (namedTarget && BACK_TARGETS[namedTarget]) {
+            return BACK_TARGETS[namedTarget];
         }
 
-        portalBackButton.href = backUrl;
+        const requestedUrl = params.get('return_url') || params.get('returnUrl') || params.get('back_url');
+        if (requestedUrl) {
+            const safeUrl = getAllowedUrl(requestedUrl);
+            if (safeUrl) return safeUrl;
+        }
+
+        const referrerUrl = getAllowedUrl(document.referrer);
+        if (referrerUrl && referrerUrl !== window.location.href) {
+            return referrerUrl;
+        }
+
+        return PORTAL_URL;
+    }
+
+    function getAllowedUrl(url) {
+        if (!url) return '';
+
+        try {
+            const parsedUrl = new URL(url);
+            if (ALLOWED_BACK_ORIGINS.has(parsedUrl.origin)) {
+                return parsedUrl.href;
+            }
+        } catch (e) {
+            return '';
+        }
+
+        return '';
     }
 
     setupPortalBackButton();
